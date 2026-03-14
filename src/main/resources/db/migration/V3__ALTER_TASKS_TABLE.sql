@@ -1,0 +1,1 @@
+ALTER TABLE task ADD CONSTRAINT uq_task_title_created_by UNIQUE (title, created_by_id);
