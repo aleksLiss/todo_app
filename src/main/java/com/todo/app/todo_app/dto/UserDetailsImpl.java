@@ -1,6 +1,6 @@
 package com.todo.app.todo_app.dto;
 
-import lombok.Data;
+import lombok.*;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,9 +11,9 @@ import java.util.UUID;
 
 @Data
 public class UserDetailsImpl implements UserDetails {
-    private final UUID userId;
-    private final String email;
-    private final String password;
+    private UUID userId;
+    private String email;
+    private String password;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
