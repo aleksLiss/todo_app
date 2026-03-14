@@ -2,13 +2,20 @@ package com.todo.app.todo_app.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import java.security.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "task")
+@Data
+@Table(name = "task",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uq_task_title_created_by",
+                        columnNames = {"title", "created_by_id"})
+        })
 public class Task {
 
     @Id
@@ -26,7 +33,7 @@ public class Task {
     private User createdBy;
     @Column(name = "is_completed", nullable = false)
     private boolean isCompleted;
-    @Column(name = "completed_at")
-    private Timestamp completedAt;
+    @Column(name = "completed_at", columnDefinition = "TIMESTAMP")
+    private LocalDateTime completedAt;
 
 }
