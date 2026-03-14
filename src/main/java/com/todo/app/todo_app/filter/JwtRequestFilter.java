@@ -45,6 +45,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (Exception ex) {
+            log.error("JWT Filter error: {}", ex.getMessage());
+            response.setContentType("application/json");
             handlerExceptionResolver.resolveException(request, response, null, ex);
         }
     }
