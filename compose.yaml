@@ -1,0 +1,63 @@
+services:
+  todo_app:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=deploy
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_URL=${POSTGRES_URL}
+      - KAFKA_PORT_EXT=${KAFKA_PORT_EXT}
+      - KAFKA_PORT_INT=${KAFKA_PORT_INT}
+      - KAFKA_PORT_CTRL=${KAFKA_PORT_CTRL}
+      - KAFKA_CLUSTER_ID=${KAFKA_CLUSTER_ID}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+    depends_on:
+      - kafka
+      - postgres
+  kafka:
+    image: apache/kafka:4.0.2-rc3
+    container_name: kafka
+    ports:
+      - "${KAFKA_PORT_EXT}:${KAFKA_PORT_INT}"
+    environment:
+      # Роль узла: контроллер и брокер (для KRaft)
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:${KAFKA_PORT_CTRL}'
+      # Настройка слушателей:
+      KAFKA_LISTENERS: 'PLAINTEXT://0.0.0.0:${KAFKA_PORT_EXT},CONTROLLER://0.0.0.0:${KAFKA_PORT_CTRL},INTERNAL://0.0.0.0:${KAFKA_PORT_INT}'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://localhost:${KAFKA_PORT_EXT},INTERNAL://kafka:${KAFKA_PORT_INT}'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,INTERNAL:PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'INTERNAL'
+      # Идентификатор кластера (обязателен для KRaft)
+      CLUSTER_ID: ${KAFKA_CLUSTER_ID}
+      # Настройки хранения данных
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-postgres}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+volumes:
+  postgres_data:
+    driver: local
