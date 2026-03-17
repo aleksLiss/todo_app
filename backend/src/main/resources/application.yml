@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: todo_app
+  datasource:
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    url: ${POSTGRES_URL}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  flyway:
+    ignore-migration-patterns: "*:*"
