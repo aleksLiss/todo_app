@@ -1,6 +1,6 @@
 package com.todo.app.backend.dto;
 
-public record SignUpResponseDto(
+public record JwtTokenResponseDto(
         String token
 ) {
 }
