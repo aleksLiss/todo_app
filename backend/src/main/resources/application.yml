@@ -11,3 +11,8 @@ spring:
     show-sql: true
   flyway:
     ignore-migration-patterns: "*:*"
+app:
+  jwt:
+    config:
+      lifetime-token: ${LIFETIME_TOKEN}
+      secret-key: ${SECRET_KEY}
