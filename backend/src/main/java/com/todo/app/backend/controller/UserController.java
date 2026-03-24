@@ -2,14 +2,14 @@ package com.todo.app.backend.controller;
 
 import com.todo.app.backend.dto.GetUserResponseDto;
 import com.todo.app.backend.dto.JwtTokenResponseDto;
-import com.todo.app.backend.dto.RequestUserDto;
+import com.todo.app.backend.dto.SignUpUserDto;
 import com.todo.app.backend.security.UserPrincipal;
 import com.todo.app.backend.service.JwtService;
 import com.todo.app.backend.service.UserService;
-import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,12 +25,13 @@ public class UserController {
     private final JwtService jwtService;
 
     @PostMapping("/user")
-    public ResponseEntity<@NonNull JwtTokenResponseDto> signUp(@Valid @ModelAttribute RequestUserDto requestUserDto) {
-        UserPrincipal userPrincipal = userService.save(requestUserDto);
+    public ResponseEntity<@NonNull JwtTokenResponseDto> signUp(@RequestBody SignUpUserDto signUpUserDto) {
+        UserPrincipal userPrincipal = userService.save(signUpUserDto);
         String token = jwtService.generateToken(userPrincipal);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new JwtTokenResponseDto(token));
+                .header(HttpHeaders.AUTHORIZATION, token)
+                .build();
     }
 
     @GetMapping("/user")
@@ -39,7 +40,8 @@ public class UserController {
                 userPrincipal.id(),
                 userPrincipal.email()
         );
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(responseDto);
     }
 }
