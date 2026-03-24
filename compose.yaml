@@ -1,7 +1,15 @@
 services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    environment:
+      BACKEND_API_URL: "http://todo_app:8080"
+    depends_on:
+      - todo_app
   todo_app:
     build:
-      context: .
+      context: ./backend
     ports:
       - "8080:8080"
     environment:
@@ -15,6 +23,7 @@ services:
       - KAFKA_PORT_CTRL=${KAFKA_PORT_CTRL}
       - KAFKA_CLUSTER_ID=${KAFKA_CLUSTER_ID}
       - POSTGRES_PORT=${POSTGRES_PORT}
+      - BACKEND_API_URL=${BACKEND_API_URL}
     depends_on:
       - kafka
       - postgres

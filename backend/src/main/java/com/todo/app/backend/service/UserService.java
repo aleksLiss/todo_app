@@ -1,6 +1,6 @@
 package com.todo.app.backend.service;
 
-import com.todo.app.backend.dto.RequestUserDto;
+import com.todo.app.backend.dto.SignUpUserDto;
 import com.todo.app.backend.exception.UserAlreadyExists;
 import com.todo.app.backend.exception.UserNotFoundException;
 import com.todo.app.backend.model.User;
@@ -23,11 +23,11 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserPrincipal save(RequestUserDto requestUserDto) {
-        ifUsernameExists(requestUserDto.email());
+    public UserPrincipal save(SignUpUserDto signUpUserDto) {
+        ifUsernameExists(signUpUserDto.email());
         User user = new User();
-        user.setEmail(requestUserDto.email());
-        user.setPassword(passwordEncoder.encode(requestUserDto.password()));
+        user.setEmail(signUpUserDto.email());
+        user.setPassword(passwordEncoder.encode(signUpUserDto.password()));
         User savedUser = userRepository.save(user);
         return new UserPrincipal(
                 savedUser.getId(),
