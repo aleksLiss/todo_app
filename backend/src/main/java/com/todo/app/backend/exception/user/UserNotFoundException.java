@@ -1,7 +1,10 @@
-package com.todo.app.backend.exception;
+package com.todo.app.backend.exception.user;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String message) {
         super(message);
+    }
+
+    public UserNotFoundException() {
     }
 }
