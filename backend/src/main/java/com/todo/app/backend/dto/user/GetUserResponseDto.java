@@ -1,4 +1,4 @@
-package com.todo.app.backend.dto;
+package com.todo.app.backend.dto.user;
 
 import java.util.UUID;
 

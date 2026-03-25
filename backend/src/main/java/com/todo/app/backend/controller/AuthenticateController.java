@@ -1,6 +1,6 @@
 package com.todo.app.backend.controller;
 
-import com.todo.app.backend.dto.LoginUserDto;
+import com.todo.app.backend.dto.user.LoginUserDto;
 import com.todo.app.backend.security.UserPrincipal;
 import com.todo.app.backend.service.JwtService;
 import com.todo.app.backend.service.UserService;
