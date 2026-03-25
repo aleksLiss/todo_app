@@ -1,8 +1,8 @@
 package com.todo.app.backend.service;
 
-import com.todo.app.backend.dto.SignUpUserDto;
-import com.todo.app.backend.exception.UserAlreadyExists;
-import com.todo.app.backend.exception.UserNotFoundException;
+import com.todo.app.backend.dto.user.SignUpUserDto;
+import com.todo.app.backend.exception.user.UserAlreadyExists;
+import com.todo.app.backend.exception.user.UserNotFoundException;
 import com.todo.app.backend.model.User;
 import com.todo.app.backend.repository.UserRepository;
 import com.todo.app.backend.security.UserPrincipal;
