@@ -1,5 +1,6 @@
 package com.todo.app.backend.service;
 
+import com.todo.app.backend.dto.KafkaMessageDto;
 import com.todo.app.backend.dto.user.SignUpUserDto;
 import com.todo.app.backend.exception.user.UserAlreadyExists;
 import com.todo.app.backend.exception.user.UserNotFoundException;
@@ -22,6 +23,8 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final KafkaMessagingService kafkaMessagingService;
+
 
     public UserPrincipal save(SignUpUserDto signUpUserDto) {
         ifUsernameExists(signUpUserDto.email());
@@ -29,6 +32,12 @@ public class UserService implements UserDetailsService {
         user.setEmail(signUpUserDto.email());
         user.setPassword(passwordEncoder.encode(signUpUserDto.password()));
         User savedUser = userRepository.save(user);
+        kafkaMessagingService.sendMessage(
+                new KafkaMessageDto(
+                        String.format("%s, you are sign up successfully!",
+                                savedUser.getEmail())
+                )
+        );
         return new UserPrincipal(
                 savedUser.getId(),
                 savedUser.getEmail(),
