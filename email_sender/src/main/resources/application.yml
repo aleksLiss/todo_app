@@ -2,11 +2,12 @@ spring:
   application:
     name: "email_sender"
   kafka:
-    topic_name: ${KAFKA_TOPIC_NAME}
-    partitions_count: ${KAFKA_PARTITIONS_COUNT}
-    replication_count: ${KAFKA_REPLICATIONS_COUNT}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    topic-name: ${KAFKA_TOPIC_NAME}
+    partitions-count: 3
+    replication-count: 1
     consumer:
       auto-offset-reset: earliest
-      key-serializer: ${KAFKA_KEY_SERIALIZER}
-      value-serializer: ${KAFKA_VALUE_SERIALIZER}
-      group-id: "email-sender-group"
+      key-deserializer: ${KAFKA_KEY_DESERIALIZER}
+      value-deserializer: ${KAFKA_VALUE_DESERIALIZER}
+      group-id: ${KAFKA_GROUP_ID}
