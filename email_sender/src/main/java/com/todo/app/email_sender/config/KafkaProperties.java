@@ -13,8 +13,8 @@ public record KafkaProperties(
     public record Consumer(
             String groupId,
             String autoOffsetReset,
-            String keySerializer,
-            String valueSerializer
+            String keyDeserializer,
+            String valueDeserializer
     ) {
     }
 }
