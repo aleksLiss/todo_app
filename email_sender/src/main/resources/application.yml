@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: "email_sender"
+  kafka:
+    topic_name: ${KAFKA_TOPIC_NAME}
+    partitions_count: ${KAFKA_PARTITIONS_COUNT}
+    replication_count: ${KAFKA_REPLICATIONS_COUNT}
+    consumer:
+      auto-offset-reset: earliest
+      key-serializer: ${KAFKA_KEY_SERIALIZER}
+      value-serializer: ${KAFKA_VALUE_SERIALIZER}
+      group-id: "email-sender-group"
