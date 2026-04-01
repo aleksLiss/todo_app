@@ -1,4 +1,19 @@
 spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_PORT_EXT}
+    producer:
+      key-serializer: ${KAFKA_KEY_SERIALIZER}
+      value-serializer: ${KAFKA_VALUE_SERIALIZER}
+      properties:
+        acks: 1
+        spring:
+          json:
+            add:
+              type:
+                headers: false
+    topic-name: ${KAFKA_TOPIC_NAME}
+    partitions-count: ${KAFKA_REPLICATIONS_COUNT}
+    replication-count: ${KAFKA_PARTITIONS_COUNT}
   application:
     name: todo_app
   datasource:
@@ -14,5 +29,5 @@ spring:
 app:
   jwt:
     config:
-      lifetime-token: ${LIFETIME_TOKEN}
-      secret-key: ${SECRET_KEY}
+      lifetime-token: 30m
+      secret-key: "Py+iM0RLDoelxAJ3SZxL5L1z7jujb2WFzT6WfLp08AY="
