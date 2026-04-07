@@ -1,4 +1,17 @@
 spring:
+  mail:
+    protocol: smtp
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT}
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    from: ${SMTP_EMAIL_FROM}
+    properties:
+      mail:
+        smtp:
+          auth: true
+        starttls:
+          enable: true
   application:
     name: "email_sender"
   kafka:
