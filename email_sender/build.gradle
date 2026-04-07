@@ -25,6 +25,10 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-mail:4.0.5'
+    implementation 'org.mapstruct:mapstruct-processor:1.6.3'
+    implementation 'org.mapstruct:mapstruct:1.6.3'
+    implementation 'com.google.code.gson:gson:2.13.1'
 }
 
 tasks.named('test') {
