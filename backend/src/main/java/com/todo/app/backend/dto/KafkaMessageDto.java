@@ -1,6 +1,8 @@
 package com.todo.app.backend.dto;
 
 public record KafkaMessageDto(
-        String message
+        String email,
+        String title,
+        String body
 ) {
 }
