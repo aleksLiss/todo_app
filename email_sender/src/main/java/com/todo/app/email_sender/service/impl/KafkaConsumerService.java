@@ -1,10 +1,12 @@
 package com.todo.app.email_sender.service.impl;
 
 import com.todo.app.email_sender.dto.KafkaMessageDto;
+import com.todo.app.email_sender.model.MessageReceivedEvent;
 import com.todo.app.email_sender.service.ConsumerService;
 import com.todo.app.email_sender.service.CreatorService;
 import com.todo.app.email_sender.service.SenderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
@@ -13,13 +15,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KafkaConsumerService implements ConsumerService {
 
-    private final CreatorService creatorService;
-    private final SenderService senderService;
+    private final ApplicationEventPublisher publisher;
 
     @KafkaListener(topics = "${KAFKA_TOPIC_NAME}", groupId = "${KAFKA_GROUP_ID}")
     @Override
     public void receive(KafkaMessageDto kafkaMessageDto) {
-        SimpleMailMessage message = creatorService.create(kafkaMessageDto);
-        senderService.sendEmail(message);
+        publisher.publishEvent(new MessageReceivedEvent(kafkaMessageDto));
     }
 }
