@@ -18,7 +18,7 @@ import java.util.Map;
 public class KafkaConfig {
 
     @Bean
-    public ProducerFactory<@NonNull String, @NonNull String> producerFactory(KafkaProperties kafkaProperties) {
+    public ProducerFactory<@NonNull String, @NonNull KafkaMessageDto> producerFactory(KafkaProperties kafkaProperties) {
         Map<String, Object> configs = new HashMap<>();
         configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.bootstrapServers());
         configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, kafkaProperties.producer().keySerializer());
