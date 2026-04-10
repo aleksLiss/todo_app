@@ -7,8 +7,8 @@ public record KafkaProperties(
         String bootstrapServers,
         Producer producer,
         String topicName,
-        int partitionsCount,
-        int replicationCount
+        String partitionsCount,
+        String replicationCount
 ) {
     public record Producer(
             String keySerializer,
