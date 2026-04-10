@@ -1,5 +1,6 @@
 package com.todo.app.backend.config;
 
+import com.todo.app.backend.dto.KafkaMessageDto;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -26,7 +27,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<@NonNull String,@NonNull String> kafkaTemplate(ProducerFactory<@NonNull String, @NonNull String> producerFactory) {
+    public KafkaTemplate<@NonNull String,@NonNull KafkaMessageDto> kafkaTemplate(ProducerFactory<@NonNull String, @NonNull KafkaMessageDto> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 }
