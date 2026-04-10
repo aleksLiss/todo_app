@@ -1,12 +1,9 @@
 package com.todo.app.backend.service;
 
-import aQute.bnd.annotation.jpms.Open;
 import com.todo.app.backend.dto.task.SaveTaskDto;
 import com.todo.app.backend.dto.task.UpdateTaskDto;
 import com.todo.app.backend.exception.task.DeleteTaskException;
-import com.todo.app.backend.exception.task.TaskAlreadyExists;
 import com.todo.app.backend.exception.task.TaskNotFoundException;
-import com.todo.app.backend.exception.task.UpdateTaskException;
 import com.todo.app.backend.exception.user.UserNotFoundException;
 import com.todo.app.backend.mapper.TaskDtoMapper;
 import com.todo.app.backend.model.Task;
@@ -14,15 +11,12 @@ import com.todo.app.backend.model.User;
 import com.todo.app.backend.repository.TaskRepository;
 import com.todo.app.backend.repository.UserRepository;
 import com.todo.app.backend.security.UserPrincipal;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j

@@ -23,8 +23,8 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final KafkaMessagingService kafkaMessagingService;
-
+    private final MessageCreator messageCreator;
+    private final SenderService senderService;
 
     public UserPrincipal save(SignUpUserDto signUpUserDto) {
         ifUsernameExists(signUpUserDto.email());
@@ -32,12 +32,8 @@ public class UserService implements UserDetailsService {
         user.setEmail(signUpUserDto.email());
         user.setPassword(passwordEncoder.encode(signUpUserDto.password()));
         User savedUser = userRepository.save(user);
-        kafkaMessagingService.sendMessage(
-                new KafkaMessageDto(
-                        String.format("%s, you are sign up successfully!",
-                                savedUser.getEmail())
-                )
-        );
+        KafkaMessageDto kafkaMessageDto = messageCreator.create(savedUser);
+        senderService.send(kafkaMessageDto);
         return new UserPrincipal(
                 savedUser.getId(),
                 savedUser.getEmail(),
