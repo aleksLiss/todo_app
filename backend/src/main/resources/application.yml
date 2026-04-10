@@ -12,8 +12,8 @@ spring:
               type:
                 headers: false
     topic-name: ${KAFKA_TOPIC_NAME}
-    partitions-count: ${KAFKA_REPLICATIONS_COUNT}
-    replication-count: ${KAFKA_PARTITIONS_COUNT}
+    partitions-count: ${KAFKA_PARTITIONS_COUNT}
+    replication-count: ${KAFKA_REPLICATIONS_COUNT}
   application:
     name: todo_app
   datasource:
@@ -30,4 +30,4 @@ app:
   jwt:
     config:
       lifetime-token: 30m
-      secret-key: "Py+iM0RLDoelxAJ3SZxL5L1z7jujb2WFzT6WfLp08AY="
+      secret-key: "Py+iM0RLDoelxAJ3SZxL5L1z7jujb2WFqwzT6WfLp08AY="
