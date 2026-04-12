@@ -27,4 +27,4 @@ app:
   jwt:
     config:
       lifetime-token: 30m
-      secret-key: "))))))"
+      secret-key: ${SECRET_KEY}
