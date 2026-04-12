@@ -1,19 +1,16 @@
 spring:
   kafka:
-    bootstrap-servers: ${KAFKA_PORT_EXT}
-    producer:
-      key-serializer: ${KAFKA_KEY_SERIALIZER}
-      value-serializer: ${KAFKA_VALUE_SERIALIZER}
-      properties:
-        acks: 1
-        spring:
-          json:
-            add:
-              type:
-                headers: false
-    topic-name: ${KAFKA_TOPIC_NAME}
-    partitions-count: ${KAFKA_PARTITIONS_COUNT}
-    replication-count: ${KAFKA_REPLICATIONS_COUNT}
+    bootstrap-servers: kafka:9092
+    properties:
+      acks: 1
+      spring:
+        json:
+          add:
+            type:
+              headers: false
+    topic-name: "EMAIL_SENDING_TASKS"
+    partitions-count: 3
+    replication-count: 1
   application:
     name: todo_app
   datasource:
