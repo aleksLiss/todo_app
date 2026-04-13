@@ -17,8 +17,8 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     topic-name: ${KAFKA_TOPIC_NAME}
-    partitions-count: 3
-    replication-count: 1
+    partitions-count: ${KAFKA_PARTITIONS_COUNT}
+    replication-count: ${KAFKA_REPLICATIONS_COUNT}
     consumer:
       auto-offset-reset: earliest
       key-deserializer: ${KAFKA_KEY_DESERIALIZER}
