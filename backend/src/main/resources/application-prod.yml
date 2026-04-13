@@ -26,5 +26,5 @@ spring:
 app:
   jwt:
     config:
-      lifetime-token: ${LIFETIME_TOKEN}
+      lifetime-token: 30m
       secret-key: ${SECRET_KEY}
