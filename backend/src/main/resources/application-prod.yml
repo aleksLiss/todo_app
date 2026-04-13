@@ -8,7 +8,7 @@ spring:
           add:
             type:
               headers: false
-    topic-name: "EMAIL_SENDING_TASKS"
+    topic-name: ${KAFKA_TOPIC_NAME}
     partitions-count: ${KAFKA_PARTITIONS_COUNT}
     replication-count: ${KAFKA_REPLICATIONS_COUNT}
   application:
