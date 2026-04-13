@@ -9,6 +9,7 @@ import com.todo.app.backend.repository.UserRepository;
 import com.todo.app.backend.security.UserPrincipal;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -33,7 +35,9 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(signUpUserDto.password()));
         User savedUser = userRepository.save(user);
         KafkaMessageDto kafkaMessageDto = messageCreator.create(savedUser);
+        log.warn("BEFORE SEND MESSAGE========================================!!!!!!!!!!");
         senderService.send(kafkaMessageDto);
+        log.warn("AFTER SEND MESSAGE========================================!!!!!!!!!!");
         return new UserPrincipal(
                 savedUser.getId(),
                 savedUser.getEmail(),
