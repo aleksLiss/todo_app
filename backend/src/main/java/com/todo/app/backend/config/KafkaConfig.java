@@ -20,13 +20,18 @@ import java.util.Map;
 public class KafkaConfig {
 
     @Bean
-    public ProducerFactory<@NonNull String, @NonNull KafkaMessageDto> producerFactory(KafkaProperties kafkaProperties) {
+    public ProducerFactory<String, KafkaMessageDto> producerFactory(KafkaProperties kafkaProperties) {
         Map<String, Object> configs = new HashMap<>();
         configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.bootstrapServers());
         configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+
+        // Псевдоним для типа, чтобы Consumer его узнал
+        configs.put(JsonSerializer.TYPE_MAPPINGS, "kafkaMessageDto:com.todo.app.backend.dto.KafkaMessageDto");
+
         return new DefaultKafkaProducerFactory<>(configs);
     }
+
 
     @Bean
     public KafkaTemplate<@NonNull String,@NonNull KafkaMessageDto> kafkaTemplate(ProducerFactory<@NonNull String, @NonNull KafkaMessageDto> producerFactory) {

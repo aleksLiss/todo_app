@@ -5,16 +5,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.kafka")
 public record KafkaProperties(
         String bootstrapServers,
-        Consumer consumer,
         String topicName,
         int partitionsCount,
-        int replicationCount
+        int replicationCount,
+        Consumer consumer
 ) {
     public record Consumer(
             String groupId,
-            String autoOffsetReset,
-            String keyDeserializer,
-            String valueDeserializer
+            String autoOffsetReset
     ) {
     }
 }

@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     properties:
       acks: 1
       spring:
@@ -8,9 +8,9 @@ spring:
           add:
             type:
               headers: false
-    topic-name: "EMAIL_SENDING_TASKS"
-    partitions-count: 3
-    replication-count: 1
+    topic-name: ${KAFKA_TOPIC_NAME}
+    partitions-count: ${KAFKA_PARTITIONS_COUNT}
+    replication-count: ${KAFKA_REPLICATIONS_COUNT}
   application:
     name: todo_app
   datasource:
