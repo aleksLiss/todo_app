@@ -1,13 +1,16 @@
 package com.todo.app.scheduler.config;
 
+import com.todo.app.scheduler.dto.KafkaMessageDto;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,16 +20,17 @@ import java.util.Map;
 public class KafkaConfig {
 
     @Bean
-    public ProducerFactory<@NonNull String,@NonNull String> producerFactory(KafkaProperties kafkaProperties) {
+    public ProducerFactory<@NonNull String,@NonNull KafkaMessageDto> producerFactory(KafkaProperties kafkaProperties) {
         Map<String, Object> configs = new HashMap<>();
         configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.bootstrapServers());
-        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, kafkaProperties.producer().keySerializer());
-        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, kafkaProperties.producer().valueSerializer());
+        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configs.put(JsonSerializer.TYPE_MAPPINGS, "kafkaMessageDto:com.todo.app.scheduler.dto.KafkaMessageDto");
         return new DefaultKafkaProducerFactory<>(configs);
     }
 
     @Bean
-    public KafkaTemplate<@NonNull String, @NonNull String> kafkaTemplate(ProducerFactory<@NonNull String,@NonNull String> producerFactory) {
+    public KafkaTemplate<@NonNull String, @NonNull KafkaMessageDto> kafkaTemplate(ProducerFactory<@NonNull String,@NonNull KafkaMessageDto> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 }
