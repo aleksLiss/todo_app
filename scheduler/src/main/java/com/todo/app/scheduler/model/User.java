@@ -1,6 +1,5 @@
 package com.todo.app.scheduler.model;
 
-
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
