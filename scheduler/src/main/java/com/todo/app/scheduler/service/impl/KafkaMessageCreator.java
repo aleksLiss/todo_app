@@ -1,7 +1,9 @@
-package com.todo.app.scheduler.service;
+package com.todo.app.scheduler.service.impl;
 
 import com.todo.app.scheduler.dto.KafkaMessageDto;
 import com.todo.app.scheduler.model.Task;
+import com.todo.app.scheduler.model.User;
+import com.todo.app.scheduler.service.MessageCreator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,17 +14,15 @@ public class KafkaMessageCreator implements MessageCreator {
 
     private static final String INCOMPLETED_TASK = "You have %d incompleted tasks: %s";
     private static final String COMPLETED_TASK = "You have %d completed tasks: %s";
+    private static final String TITLE = "Daily report";
 
     @Override
-    public KafkaMessageDto create(boolean isCompleted, List<Task> tasks) {
-        return isCompleted
-                ? new KafkaMessageDto(
-                createMessageByTemplate(COMPLETED_TASK, tasks)
-        )
-                :
-                new KafkaMessageDto(
-                        createMessageByTemplate(INCOMPLETED_TASK, tasks)
-                );
+    public KafkaMessageDto create(boolean isCompleted, List<Task> tasks, User user) {
+        String email = user.getEmail();
+        String body = isCompleted
+                ? createMessageByTemplate(COMPLETED_TASK, tasks)
+                : createMessageByTemplate(INCOMPLETED_TASK, tasks);
+        return new KafkaMessageDto(email, TITLE, body);
     }
 
     private String createMessageByTemplate(String template, List<Task> tasks) {
