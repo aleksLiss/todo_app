@@ -1,5 +1,6 @@
 package com.todo.app.email_sender.service.impl;
 
+import com.todo.app.email_sender.exception.SendEmailException;
 import com.todo.app.email_sender.model.MessageReceivedEvent;
 import com.todo.app.email_sender.service.CreatorService;
 import com.todo.app.email_sender.service.MessageProcessor;
@@ -22,7 +23,13 @@ public class KafkaMessageProcessor implements MessageProcessor {
     @Override
     public void processMessage(MessageReceivedEvent event) {
         SimpleMailMessage message = receiveMessage(event);
-//        senderService.sendEmail(message);
+        log.warn("RECEIVED MESSAGE: " + message);
+        try {
+            senderService.sendEmail(message);
+        } catch (Exception e) {
+            throw new SendEmailException();
+        }
+        log.warn("SEND EMAIL SUCCESSFULLY");
     }
 
     private SimpleMailMessage receiveMessage(MessageReceivedEvent event) {
