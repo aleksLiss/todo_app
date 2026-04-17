@@ -1,6 +1,7 @@
 package com.todo.app.email_sender.service.impl;
 
 import com.todo.app.email_sender.dto.KafkaMessageDto;
+import com.todo.app.email_sender.exception.SendEmailException;
 import com.todo.app.email_sender.model.MessageReceivedEvent;
 import com.todo.app.email_sender.service.ConsumerService;
 import com.todo.app.email_sender.service.CreatorService;
@@ -22,6 +23,15 @@ public class KafkaConsumerService implements ConsumerService {
     @KafkaListener(topics = "EMAIL_SENDING_TASKS", groupId = "email-sender-group")
     @Override
     public void receive(KafkaMessageDto kafkaMessageDto) {
-        publisher.publishEvent(new MessageReceivedEvent(kafkaMessageDto));
+        try {
+            log.warn("email FROM DTO: " + kafkaMessageDto.email());
+            publisher.publishEvent(new MessageReceivedEvent(kafkaMessageDto));
+        } catch (Exception ex) {
+            log.error("=============================");
+            // ex.toString() вместо ex.getMessage(), чтобы не было null
+            log.error("DETAILED ERROR: ", ex);
+            log.error("=============================");
+            throw new SendEmailException(ex.getMessage());
+        }
     }
 }
