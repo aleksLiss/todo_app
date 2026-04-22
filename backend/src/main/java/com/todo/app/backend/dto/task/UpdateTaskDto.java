@@ -13,4 +13,8 @@ public record UpdateTaskDto(
         boolean isCompleted,
         LocalDateTime createdAt,
         LocalDateTime completedAt
-) {}
+) {
+    public UpdateTaskDto() {
+        this(null, null, null, false, null, null);
+    }
+}

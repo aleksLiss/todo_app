@@ -4,12 +4,10 @@ import com.todo.app.backend.dto.task.SaveTaskDto;
 import com.todo.app.backend.dto.task.UpdateTaskDto;
 import com.todo.app.backend.exception.task.DeleteTaskException;
 import com.todo.app.backend.exception.task.TaskNotFoundException;
-import com.todo.app.backend.exception.user.UserNotFoundException;
 import com.todo.app.backend.mapper.TaskDtoMapper;
 import com.todo.app.backend.model.Task;
 import com.todo.app.backend.model.User;
 import com.todo.app.backend.repository.TaskRepository;
-import com.todo.app.backend.repository.UserRepository;
 import com.todo.app.backend.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +23,6 @@ import java.util.UUID;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
     private final TaskDtoMapper taskDtoMapper;
 
     public void save(SaveTaskDto saveTaskDto, UserPrincipal userPrincipal) {
@@ -38,7 +35,6 @@ public class TaskService {
     }
 
     public UpdateTaskDto updateTaskById(UUID taskId, UpdateTaskDto updateTaskDto) {
-        log.warn("updateTaskById " +  updateTaskDto.toString());
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(
                         TaskNotFoundException::new
@@ -69,9 +65,10 @@ public class TaskService {
     }
 
     private User getUserByEmail(UserPrincipal userPrincipal) {
-        return userRepository.getUserByEmail(userPrincipal.email())
-                .orElseThrow(
-                        UserNotFoundException::new
-                );
+        User user = new User();
+        user.setId(userPrincipal.id());
+        user.setEmail(userPrincipal.getUsername());
+        user.setPassword(userPrincipal.getPassword());
+        return user;
     }
 }

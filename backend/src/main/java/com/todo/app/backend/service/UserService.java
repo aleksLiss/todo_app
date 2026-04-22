@@ -35,9 +35,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(signUpUserDto.password()));
         User savedUser = userRepository.save(user);
         KafkaMessageDto kafkaMessageDto = messageCreator.create(savedUser);
-        log.warn("BEFORE SEND MESSAGE========================================!!!!!!!!!!");
         senderService.send(kafkaMessageDto);
-        log.warn("AFTER SEND MESSAGE========================================!!!!!!!!!!");
         return new UserPrincipal(
                 savedUser.getId(),
                 savedUser.getEmail(),
@@ -55,9 +53,8 @@ public class UserService implements UserDetailsService {
         );
     }
 
-
     @Override
-    public @NonNull UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
+    public @NonNull UserDetails loadUserByUsername(@NonNull String username) {
         User foundUser = userRepository.getUserByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return new org.springframework.security.core.userdetails.User(

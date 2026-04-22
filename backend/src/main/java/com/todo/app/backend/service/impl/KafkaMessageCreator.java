@@ -17,7 +17,6 @@ public class KafkaMessageCreator implements MessageCreator {
         String email = user.getEmail();
         String title = "Sign up successfully!";
         String body = String.format("Welcome %s to TODO application!", email);
-        log.warn("CREATE MESSAGE INTO BACKEND========================================!!!!!!!!!!");
         return new KafkaMessageDto(email, title, body);
     }
 }
