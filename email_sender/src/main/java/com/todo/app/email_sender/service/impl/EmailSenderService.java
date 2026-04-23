@@ -1,5 +1,6 @@
 package com.todo.app.email_sender.service.impl;
 
+import com.todo.app.email_sender.exception.SendEmailException;
 import com.todo.app.email_sender.service.SenderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +20,9 @@ public class EmailSenderService implements SenderService {
     @Override
     public void sendEmail(SimpleMailMessage message) {
         try {
-            log.warn("SENDING EMAIL: " + Arrays.toString(message.getTo()));
             javaMailSender.send(message);
-        } catch (Exception e) {
-            log.error("!!!!!!!! SMTP ERROR: " + e.toString()); // Это покажет реальную причину
-            e.printStackTrace();
-            throw e;
+        } catch (Exception ex) {
+            throw new SendEmailException("Exception during send email");
         }
     }
 }
