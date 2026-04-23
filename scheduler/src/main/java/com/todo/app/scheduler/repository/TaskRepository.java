@@ -16,4 +16,6 @@ public interface TaskRepository extends JpaRepository<@NonNull Task, @NonNull UU
 
     @Query("SELECT t FROM Task t JOIN FETCH t.user WHERE t.createdAt BETWEEN :start AND :end")
     List<Task> findAllByCreatedAtBetweenWithUser(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    List<Task> getTaskByTitle(String title);
 }
