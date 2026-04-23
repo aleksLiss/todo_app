@@ -22,17 +22,11 @@ public class KafkaMessageProcessor implements MessageProcessor {
     @EventListener
     @Override
     public void processMessage(MessageReceivedEvent event) {
-        SimpleMailMessage message = receiveMessage(event);
-        log.warn("RECEIVED MESSAGE: " + message);
+        SimpleMailMessage message = creatorService.create(event.dto());
         try {
             senderService.sendEmail(message);
         } catch (Exception e) {
-            throw new SendEmailException();
+            throw new SendEmailException("Exception during process email message");
         }
-        log.warn("SEND EMAIL SUCCESSFULLY");
-    }
-
-    private SimpleMailMessage receiveMessage(MessageReceivedEvent event) {
-        return creatorService.create(event.dto());
     }
 }
