@@ -1,0 +1,38 @@
+name: check.yml
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [ task-tracker-backend, task-tracker-scheduler, task-tracker-email-sender ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./${{ matrix.service }}/gradlew
+
+      - name: Run test and create Jacoco report
+        run: |
+          cd ${{matrix.service}}
+          ./gradlew clean test jacocoTestReport
+
+      - name: Build Docker Image
+        run: |
+          cd ${{matrix.service}}
+          docker build . -t ${{matrix.service}}:latest
