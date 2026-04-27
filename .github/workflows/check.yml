@@ -25,6 +25,6 @@ jobs:
       - name: Build and push ${{matrix.service}}
         uses: docker/build-push-action@v5
         with:
-          context: .${{matrix.service}}
+          context: ./${{matrix.service}}
           push: 'true'
           tags: ${{secrets.DOCKERHUB_USERNAME}}/task-tracker-${{matrix.service}}:latest
