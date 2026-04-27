@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service: [ task-tracker-backend, task-tracker-scheduler, task-tracker-email-sender ]
+        service: [ backend, scheduler, email-sender ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
