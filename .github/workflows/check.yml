@@ -7,8 +7,11 @@ on:
     branches: [ main, master ]
 
 jobs:
-  build-and-test:
+  build-and-push:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [ backend, email_sender,frontend, scheduler ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -19,8 +22,9 @@ jobs:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_PASSWORD}}
 
-      - name: Build and push image into Docker Hub
+      - name: Build and push ${{matrix.service}}
         uses: docker/build-push-action@v5
         with:
+          context: ./${{matrix.service}}
           push: 'true'
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/my-app:latest
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/task-tracker-${{matrix.service}}:latest
